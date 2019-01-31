@@ -33,7 +33,7 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
    */
   std::default_random_engine gen;
 
-  num_particles = 1000;  // TODO: Set the number of particles
+  num_particles = 50;
 
   normal_distribution<double> dist_x(x, std[0]);
   normal_distribution<double> dist_y(y, std[1]);
@@ -54,7 +54,7 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 
     particles.push_back(p);
 
-    weights.push_back(1.0); // TODO: Check?
+    weights.push_back(1.0);
   }
 
   is_initialized = true;
@@ -93,7 +93,7 @@ void ParticleFilter::prediction(double delta_t, double std_pos[],
     p.y = dist_y(gen);
     p.theta = dist_theta(gen);
 
-    particles[i] = p; // TODO: Is this necessary?
+    particles[i] = p;
   } 
 
 }
@@ -122,7 +122,6 @@ void ParticleFilter::dataAssociation(vector<LandmarkObs> predicted,
       if (current_distance < closest_distance) {
         closest_id = j;
         closest_distance = current_distance;
-        // TODO: Implement a dict of previously associated predictions
       }
     }
 
@@ -157,7 +156,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
       LandmarkObs obs = observations[j];
 
       double x_map = p.x + (cos(p.theta) * obs.x) - (sin(p.theta) * obs.y);
-      double y_map = p.y + (sin(p.theta) * obs.x) - (cos(p.theta) * obs.y);
+      double y_map = p.y + (sin(p.theta) * obs.x) + (cos(p.theta) * obs.y);
 
       observations_mc.push_back({obs.id, x_map, y_map});
     }
